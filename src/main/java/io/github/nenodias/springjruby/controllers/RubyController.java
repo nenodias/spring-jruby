@@ -23,18 +23,19 @@ public class RubyController {
     
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    
+    @Autowired
+    private ScriptingContainer ruby;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView getIndexPage() {
-        ScriptingContainer ruby = new ScriptingContainer(LocalContextScope.THREADSAFE, LocalVariableBehavior.PERSISTENT);
-        ruby.addClassLoader(getClass().getClassLoader());
         try{
             ruby.put("jdbc", jdbcTemplate);
-            List lista = jdbcTemplate.query("SELECT * FROM USERS ", (rs, rowNum) ->{
+            List lista = jdbcTemplate.query("SELECT * FROM users ", (rs, rowNum) ->{
                 Map<String, Object>mapa = new HashMap<>();
                 mapa.put("id", rs.getInt("ID"));
-                mapa.put("nome", rs.getString("NOME"));
-                mapa.put("idade", rs.getInt("IDADE"));
+                mapa.put("name", rs.getString("NAME"));
+                mapa.put("email", rs.getString("EMAIL"));
                 return mapa;
             });
             //Object retorno = ruby.runScriptlet(PathType.CLASSPATH, "ruby/info.rb");

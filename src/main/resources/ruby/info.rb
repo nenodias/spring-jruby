@@ -1,4 +1,4 @@
 callback = lambda do |rs, numRow|
-    {'id' => rs.getInt('id'), 'nome' => rs.getString('nome'), 'idade' => rs.getInt('idade')}
+    {'id' => rs.getInt('id'), 'name' => rs.getString('name'), 'email' => rs.getString('email')}
 end
-lista = jdbc.query('SELECT * FROM USERS', callback)
+lista = jdbc.query('SELECT * FROM users', callback)
