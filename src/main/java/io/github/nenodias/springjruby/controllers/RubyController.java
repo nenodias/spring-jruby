@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import org.jruby.RubyHash;
 import org.jruby.embed.LocalContextScope;
 import org.jruby.embed.LocalVariableBehavior;
-import org.jruby.embed.PathType;
 import org.jruby.embed.ScriptingContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -37,9 +37,13 @@ public class RubyController {
                 mapa.put("idade", rs.getInt("IDADE"));
                 return mapa;
             });
-            Object retorno = ruby.runScriptlet(PathType.CLASSPATH, "ruby/info.rb");
-            System.out.println(retorno);
-            System.out.println(lista);
+            //Object retorno = ruby.runScriptlet(PathType.CLASSPATH, "ruby/info.rb");
+            List<Map<String, Object>> retorno = (List) ruby.runScriptlet(getClass().getResourceAsStream("/ruby/info.rb"), "info.rb");
+            Map<String, Object> hash = (RubyHash)retorno.get(0);
+            System.out.println(hash.keySet());
+            System.out.println(hash);
+            System.out.println(retorno.get(0).getClass());
+            //System.out.println(lista);
         }catch(Exception ex){
             ex.printStackTrace();
             LOGGER.error(ex.getMessage(), ex);
